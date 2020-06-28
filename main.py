@@ -7,18 +7,21 @@ import socket
 import os.path
 
 _parser = argparse.ArgumentParser(prog='bofman',description='investigate and exploit buffer overflows')
-_parser.add_argument('ip',type=str,help='ip of remote target')
-_parser.add_argument('port',type=int,help='remote port')
+
 #_parser.add_argument('--mode',action='store',choices=['test','exploit'],required=True,)
 
 _subparsers = _parser.add_subparsers(help='sub command help',dest='cmdlet')
 
 test_parser = _subparsers.add_parser('test',help='options for test')
+test_parser.add_argument('ip',type=str,help='ip of remote target')
+test_parser.add_argument('port',type=int,help='remote port')
 test_parser.add_argument('--len',type=int,help='size of buffer to send',default=1024)
 test_parser.add_argument('--buffer-type',type=str,choices=['a','pattern'],help='type of buffer to send',default='a')
 test_parser.add_argument('--command',type=str,help='server command to prepend buffer with')
 
 exploit_parser = _subparsers.add_parser('exploit',help='options for exploit')
+exploit_parser.add_argument('ip',type=str,help='ip of remote target')
+exploit_parser.add_argument('port',type=int,help='remote port')
 exploit_parser.add_argument('--len',type=int,help='size of buffer to send',required=True)
 exploit_parser.add_argument('--offsetEIP',type=int,help='how many bytes to write before EIP',required=True)
 exploit_parser.add_argument('--eip',type=str,help='memory location to overwrite EIP',required=True)
