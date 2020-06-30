@@ -28,7 +28,7 @@ exploit_parser.add_argument('--eip',type=str,help='memory location to overwrite 
 exploit_parser.add_argument('--shellcode',type=str,help='path to shellcode in raw binary form',required=True)
 exploit_parser.add_argument('--shellcodeOffset',type=int,help='offset to begin shellcode',required=True)
 exploit_parser.add_argument('--sub_esp',type=int,help='integer value to (1-9) of how many kilobytes to subtract from ESP')
-exploit_parser.add_argument('--nops',type=int,help='offset to begin shellcode')
+exploit_parser.add_argument('--nops',type=int,help='number of nops to place before shellcode')
 exploit_parser.add_argument('--command',type=str,help='server command to prepend buffer with')
 
 
