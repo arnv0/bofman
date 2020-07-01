@@ -1,4 +1,4 @@
-tool to assist in development and testing of simple buffer overflow exploits
+tool to assist in development and testing of simple x86 network based buffer overflow exploits
 
 use --help for instructions
 
