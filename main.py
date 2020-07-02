@@ -48,7 +48,7 @@ if __name__ == '__main__':
 		print('test')
 
 		if(args.command != None):
-			buffer = args.command.encode()+b' '
+			buffer = args.command.encode()
 
 		if(args.buffer_type=='a'):
 			buffer += b'A'*args.len
