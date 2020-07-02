@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
 
 		elif(args.buffer_type=='pattern'):
-			buffer=+pattern[0:args.len]
+			buffer+=pattern[0:args.len]
 
 		elif(args.buffer_type=='badchars'):
 			if(args.b == None):
