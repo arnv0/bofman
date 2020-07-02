@@ -16,7 +16,7 @@ test_parser = _subparsers.add_parser('test',help='options for test')
 test_parser.add_argument('ip',type=str,help='ip of remote target')
 test_parser.add_argument('port',type=int,help='remote port')
 test_parser.add_argument('--len',type=int,help='size of buffer to send',default=1024)
-test_parser.add_argument('--buffer-type',type=str,choices=['a','pattern','badchars'],help='type of buffer to send',default='a')
+test_parser.add_argument('--buffer-type',type=str,choices=['a','pattern','confirm','badchars'],help='type of buffer to send',default='a')
 test_parser.add_argument('--command',type=str,help='server command to prepend buffer with')
 test_parser.add_argument('-b',type=str,help='badchars to exclude from buffer seperated by commas (in integer form)')
 test_parser.add_argument('--post_command',type=str,help='server command to append buffer with (remember to escape backslashes)')
@@ -71,6 +71,9 @@ if __name__ == '__main__':
 						sys.exit(1)
 					badchars = badchars.replace(bytes([bc]),b'') #replace badchar from exclude_list with empty
 			buffer += b'A'*(args.len - 4)+b'BBBB'+badchars+b'CCCC'
+
+		elif(args.buffer_type=='confirm'):
+			buffer+=b'A'*args.len+b'BBBB'+b'CCCC'
 
 
 
