@@ -125,7 +125,7 @@ if __name__ == '__main__':
 
 
 		if(args.sub_esp == None):
-			pass
+			shellcode = shellcode1
 		else:
 			if(args.sub_esp < 1 or args.sub_esp > 9):
 				print('enter sub esp value between 1 and 9 (kB to subtract from stack pointer)')
