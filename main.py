@@ -83,7 +83,7 @@ if __name__ == '__main__':
 				print('offset to verify not specified! quitting...')
 				sys.exit(1)
 			else:
-				buffer+=b'A'*args.offset+b'BBBB'+b'CCCC'*(args.len-args.offset)
+				buffer+=b'A'*args.offset+b'BBBB'+b'CCCC'*(args.len-args.offset-4)
 
 
 
