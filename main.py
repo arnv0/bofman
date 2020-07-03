@@ -96,6 +96,7 @@ if __name__ == '__main__':
 			print('prepared buffer is:{0}...{1}'.format(buffer[0:10],buffer[len(buffer)-10:-1]))
 			try:
 				sock.connect((args.ip,args.port))
+				print(sock.recv(1024).decode())
 				sock.send(buffer)
 				sock.close()
 				print('\n successfully sent buffer of length:{}'.format(len(buffer)))
@@ -176,6 +177,7 @@ if __name__ == '__main__':
 			print('prepared buffer is:{0}...{1}'.format(buffer[0:10],buffer[len(buffer)-10:-1]))
 			try:
 				sock.connect((args.ip,args.port))
+				print(sock.recv(1024).decode())
 				sock.send(buffer)
 				sock.close()
 				print('\n successfully sent buffer of length:{}'.format(len(buffer)))
