@@ -76,7 +76,7 @@ if __name__ == '__main__':
 						print('badchar values between 0-255 only! quitting...')
 						sys.exit(1)
 					badchars = badchars.replace(bytes([bc]),b'') #replace badchar from exclude_list with empty
-			buffer += b'A'*(args.len - 4)+b'BBBB'+badchars+b'CCCC'
+			buffer += b'A'*(args.offset)+b'BBBB'+badchars+b'C'*(args.len-len(badchars)-args.offset-4)
 
 		elif(args.buffer_type=='confirm'):
 			if(args.offset == None):
