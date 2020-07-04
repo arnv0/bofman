@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
 		if(args.command != None):
 			if(args.command[0:2]=='0x'):
-				buffer = bytes.fromhex(args.command.strip('0x'))
+				buffer = bytes.fromhex(args.command.replace('0x',''))
 			else:
 				buffer = args.command.encode()
 		else:
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
 		if(args.post_command != None):
 			if(args.post_command[0:2]=='0x'):
-				buffer+=bytes.fromhex(args.post_command.strip('0x'))
+				buffer+=bytes.fromhex(args.post_command.replace('0x',''))
 			else:
 				args.post_command=args.post_command.replace('\\n','\n')
 				args.post_command=args.post_command.replace('\\r','\r')
@@ -130,7 +130,7 @@ if __name__ == '__main__':
 			buffer = b''
 		else:
 			if(args.command[0:2]=='0x'):
-				buffer = bytes.fromhex(args.command.strip('0x'))
+				buffer = bytes.fromhex(args.command.replace('0x',''))
 			else:
 				buffer = args.command.encode()
 
@@ -179,7 +179,7 @@ if __name__ == '__main__':
 
 		if(args.post_command != None):
 			if(args.post_command[0:2]=='0x'):
-				buffer+=bytes.fromhex(args.post_command.strip('0x'))
+				buffer+=bytes.fromhex(args.post_command.replace('0x',''))
 			else:
 				args.post_command=args.post_command.replace('\\n','\n')
 				args.post_command=args.post_command.replace('\\r','\r')
