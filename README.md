@@ -8,7 +8,7 @@ default shellcode is an unstaged msfvenom generated payload for a bind shell on 
 Examples:-
 
 1) features
-`usage: bofman [-h] {test,exploit,q} ...
+usage: bofman [-h] {test,exploit,q} ...
 
 investigate and exploit buffer overflows
 
@@ -19,7 +19,7 @@ positional arguments:
     q               query for offsets
 
 optional arguments:
-  -h, --help        show this help message and exit`
+  -h, --help        show this help message and exit
   
   
  2) test
