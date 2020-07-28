@@ -8,7 +8,7 @@ default shellcode is an unstaged msfvenom generated payload for a bind shell on 
 Examples:-
 
 1) features
-usage: bofman [-h] {test,exploit,q} ...
+```usage: bofman [-h] {test,exploit,q} ...
 
 investigate and exploit buffer overflows
 
@@ -19,11 +19,11 @@ positional arguments:
     q               query for offsets
 
 optional arguments:
-  -h, --help        show this help message and exit
+  -h, --help        show this help message and exit```
   
   
  2) test
- `usage: bofman test [-h] [--len LEN] [--offset OFFSET] [--buffer-type {a,pattern,confirm,badchars}] [--command COMMAND] [-b B] [--post_command POST_COMMAND] [--stdout]
+ ```usage: bofman test [-h] [--len LEN] [--offset OFFSET] [--buffer-type {a,pattern,confirm,badchars}] [--command COMMAND] [-b B] [--post_command POST_COMMAND] [--stdout]
                    ip port
 
 positional arguments:
@@ -40,10 +40,10 @@ optional arguments:
   -b B                  badchars to exclude from buffer seperated by commas (in integer form)
   --post_command POST_COMMAND
                         server command to append buffer with (remember to escape backslashes)
-  --stdout              send buffer to stdout instead of socket`
+  --stdout              send buffer to stdout instead of socket```
   
   3) exploit
-  `usage: bofman exploit [-h] --len LEN --offsetEIP OFFSETEIP --eip EIP --shellcode SHELLCODE --shellcodeOffset SHELLCODEOFFSET [--sub_esp SUB_ESP] [--nops NOPS]
+  ```usage: bofman exploit [-h] --len LEN --offsetEIP OFFSETEIP --eip EIP --shellcode SHELLCODE --shellcodeOffset SHELLCODEOFFSET [--sub_esp SUB_ESP] [--nops NOPS]
                       [--command COMMAND] [--post_command POST_COMMAND] [--stdout]
                       ip port
 
@@ -66,4 +66,4 @@ optional arguments:
   --command COMMAND     server command to prepend buffer with
   --post_command POST_COMMAND
                         server command to append buffer with (remember to escape backslashes)
-  --stdout              send buffer to stdout instead of socket`
+  --stdout              send buffer to stdout instead of socket```
