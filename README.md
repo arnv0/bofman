@@ -8,6 +8,8 @@ NOTE: IF 0x00 IS A BAD CHAR, DO NOT USE JMP_ESP, INSTEAD USE NASM_SHELL AND DIRE
 
 to be added: improve cli
 
+to see real word useage examples, look in the notes.txt files in my tryharder repo
+
 
 Examples:-
 
