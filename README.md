@@ -13,7 +13,9 @@ to see real word useage examples, look in the notes.txt files in my tryharder re
 How to Use:-
 
 1) git clone
-2) ./main --help
+2) ./main.py --help
+
+Optionally, you can softlink main.py to your /usr/bin as "bofman" (or anything you like) for a systemwide install, just make sure you update default.conf to point to your pattern file and copy it to the same dir as the softlink.
 
 
 Examples:-
