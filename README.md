@@ -4,7 +4,7 @@ use --help for instructions
 
 default shellcode is an unstaged msfvenom generated payload for a bind shell on port 4444 (windowsx86)
 
-NOTE: IF 0x00 IS A BAD CHAR, DO NOT USE the --SUB_ESP option with the EXPLOIT sub-command, INSTEAD USE NASM_SHELL AND DIRECTLY ADD YOUR STACK ADJUST TO THE SHELLCODE.BIN file
+NOTE: IF 0x00 IS A BAD CHAR, DO NOT USE the --SUB_ESP option with the EXPLOIT sub-command, INSTEAD USE NASM_SHELL AND DIRECTLY ADD YOUR STACK ADJUST TO THE SHELLCODE.BIN file using a binary file editor of your choice
 
 to be added: improve cli
 
