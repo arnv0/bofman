@@ -10,6 +10,11 @@ to be added: improve cli
 
 to see real word useage examples, look in the notes.txt files in my tryharder repo
 
+How to Use:-
+
+1) git clone
+2) ./main --help
+
 
 Examples:-
 
